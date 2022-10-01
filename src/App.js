@@ -1,4 +1,3 @@
-import "./App.css";
 import { createGlobalStyle } from "styled-components";
 import Template from "./components/Template";
 import TodoHeader from "./components/TodoHeader";
