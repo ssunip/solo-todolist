@@ -1,69 +1,77 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { MdDone, MdDelete } from "react-icons/md";
+import { MdCheckCircleOutline, MdRadioButtonUnchecked } from "react-icons/md";
+import { BiPencil, BiTrash } from "react-icons/bi";
 
 const Remove = styled.div`
+  margin: 0px 5px 0px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #dee2e6;
-  font-size: 24px;
+  color: #c3b274;
+  font-size: 25px;
   cursor: pointer;
   &:hover {
     color: #ff6b6b;
   }
-  display: none;
 `;
 
-const TodoItemBlock = styled.div`
-  display: flex;
-  align-items: center;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  &:hover {
-    ${Remove} {
-      display: initial;
-    }
-  }
-`;
-
-const CheckCircle = styled.div`
-  width: 32px;
-  height: 32px;
-  border-radius: 16px;
-  border: 1px solid #ced4da;
-  font-size: 24px;
+const Update = styled.div`
+  margin: 0px 5px 0px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 20px;
+  color: #c3b274;
+  font-size: 25px;
   cursor: pointer;
-  ${(props) =>
-    props.done &&
-    css`
-      border: 1px solid #38d9a9;
-      color: #38d9a9;
-    `}
+  &:hover {
+    color: #ff6b6b;
+  }
+`;
+
+const TodoItemBlock = styled.div`
+  padding: 0px 10px 0px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+  background-color: #414141;
+  border-bottom: 1px solid #d9d9d9;
+  // &:hover {
+  //   ${Remove} {
+  //     display: initial;
+  //   }
+  }
+  .checked {
+    margin-right: 1rem;
+    font-size: 25px;
+    color: #c3b274;
+  }
 `;
 
 const Text = styled.div`
   flex: 1;
-  font-size: 21px;
-  color: #495057;
-  ${(props) =>
-    props.done &&
-    css`
-      color: #ced4da;
-    `}
+  font-size: 15px;
+  color: #ffffff;
 `;
+// ${(props) =>
+//   props.done &&
+//   css`
+//     color: #ced4da;
+//   `}
 
-const TodoItem = ({ id, done, text }) => {
+const TodoItem = ({ todo }) => {
+  const { id, text, checked } = todo;
+
   return (
     <TodoItemBlock>
-      <CheckCircle done={done}>{done && <MdDone />}</CheckCircle>
-      <Text done={done}>{text}</Text>
+      <MdCheckCircleOutline className="checked" />
+      <Text>{text}</Text>
+      <Update>
+        <BiPencil />
+      </Update>
       <Remove>
-        <MdDelete />
+        <BiTrash />
       </Remove>
     </TodoItemBlock>
   );

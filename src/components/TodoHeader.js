@@ -2,35 +2,58 @@ import React from "react";
 import styled from "styled-components";
 
 const TodoHeaderBlock = styled.div`
-  padding-top: 48px;
-  padding-left: 32px;
-  padding-right: 32px;
-  padding-bottom: 24px;
+  padding: 55px 20px 20px 20px;
+  height: 225px;
+  background-image: url("https://user-images.githubusercontent.com/104997140/194756331-60afbebd-1fb6-43ad-9a64-230676b24fdb.jpg");
+  background-size: 375px 225px;
+  color: #ffffff;
   border-bottom: 1px solid #e9ecef;
-  h1 {
-    margin: 0;
-    font-size: 36px;
-    color: #343a40;
-  }
-  .day {
-    margin-top: 4px;
-    color: #868e96;
-    font-size: 21px;
+  font-size: 36px;
+  white-space: pre-line;
+  position: relative;
+  .today {
+    font-size: 15px;
   }
   .tasks-left {
-    color: #20c997;
-    font-size: 18px;
+    font-size: 15px;
+  }
+  .todo_detail {
     margin-top: 40px;
-    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+  }
+  .dimmed_layer {
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 150px;
+    height: 225px;
+    background-color: #414141;
+    opacity: 0.15;
   }
 `;
+
+const today = () => {
+  const date = new Date();
+  return (
+    date.getFullYear() + " / " + (date.getMonth() + 1) + " / " + date.getDate()
+  );
+};
 
 const TodoHeader = () => {
   return (
     <TodoHeaderBlock>
-      <h1>2019년 7월 10일</h1>
-      <div className="day">수요일</div>
-      <div className="tasks-left">할 일 2개 남음</div>
+      <div>
+        Your
+        <br />
+        Things...
+      </div>
+      <div className="todo_detail">
+        <span className="today">{today()}</span>
+        <span className="tasks-left">completed 5 / 10</span>
+      </div>
+      <span className="dimmed_layer"></span>
     </TodoHeaderBlock>
   );
 };
