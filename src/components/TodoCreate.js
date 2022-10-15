@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MdAdd } from "react-icons/md";
-import { use } from "chai";
 
 const Background = styled.div`
   position: absolute;
@@ -54,6 +53,9 @@ const Input = styled.input`
 
 const AddBtn = styled.button`
   background: #c3b274;
+  &:hover {
+    background: white;
+  }
 
   cursor: pointer;
   width: 40px;
@@ -67,10 +69,8 @@ const AddBtn = styled.button`
   border: none;
   outline: none;
   display: flex;
-
-  .add-btn {
-    font-size: 60px;
-  }
+  transition: 0.125s all ease-in;
+  font-size: 60px;
 `;
 
 const TodoCreate = ({ onToggle, onCreateTodo, selectedTodo }) => {
@@ -100,7 +100,7 @@ const TodoCreate = ({ onToggle, onCreateTodo, selectedTodo }) => {
             onChange={onChange}
           />
           <AddBtn type="submit">
-            <MdAdd className="add-btn" />
+            <MdAdd />
           </AddBtn>
         </InsertForm>
       </InsertFormPositioner>

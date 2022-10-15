@@ -12,7 +12,7 @@ const Remove = styled.div`
   font-size: 25px;
   cursor: pointer;
   &:hover {
-    color: #ff6b6b;
+    color: white;
   }
 `;
 
@@ -25,7 +25,7 @@ const Update = styled.div`
   font-size: 25px;
   cursor: pointer;
   &:hover {
-    color: #ff6b6b;
+    color: white;
   }
 `;
 
@@ -37,36 +37,60 @@ const TodoItemBlock = styled.div`
   height: 100px;
   background-color: #414141;
   border-bottom: 1px solid #d9d9d9;
-  // &:hover {
-  //   ${Remove} {
-  //     display: initial;
-  //   }
-  }
+`;
+
+const CheckedCircle = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-right: 1rem;
+  font-size: 25px;
+  color: #c3b274;
+
   .checked {
-    margin-right: 1rem;
-    font-size: 25px;
-    color: #c3b274;
+    text-decoration: line-through;
+    opacity: 0.6;
+    transition: 0.125s all ease-in;
   }
 `;
 
 const Text = styled.div`
+  padding: 15px;
   flex: 1;
   font-size: 15px;
   color: #ffffff;
 `;
-// ${(props) =>
-//   props.done &&
-//   css`
-//     color: #ced4da;
-//   `}
 
-const TodoItem = ({ todo }) => {
+const TodoItem = ({ todo, onCheckToggle, onToggle }) => {
   const { id, text, checked } = todo;
 
   return (
     <TodoItemBlock>
-      <MdCheckCircleOutline className="checked" />
-      <Text>{text}</Text>
+      <CheckedCircle className={`${checked ? "checked" : ""}`}>
+        {checked ? (
+          <MdCheckCircleOutline
+            onClick={() => {
+              onCheckToggle(id);
+            }}
+          />
+        ) : (
+          <MdRadioButtonUnchecked
+            onClick={() => {
+              onCheckToggle(id);
+            }}
+          />
+        )}
+        <Text
+          className={`${checked ? "checked" : ""}`}
+          onClick={() => {
+            onCheckToggle(id);
+          }}
+        >
+          {text}
+        </Text>
+      </CheckedCircle>
+
       <Update>
         <BiPencil />
       </Update>

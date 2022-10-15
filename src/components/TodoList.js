@@ -10,12 +10,23 @@ const TodoListBlock = styled.div`
   background-color: #414141;
 `;
 
-const TodoList = ({ todos }) => {
+const Title = styled.div`
+  margin-left: 10px;
+  color: white;
+  font-weight: 700;
+`;
+
+const TodoList = ({ todos, onCheckToggle, onToggle }) => {
   return (
     <TodoListBlock>
-      {/* INBOX */}
+      <Title>INBOX</Title>
       {todos.map((todo) => (
-        <TodoItem key={todo.id} todo={todo} />
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onCheckToggle={onCheckToggle}
+          onToggle={onToggle}
+        />
       ))}
     </TodoListBlock>
   );

@@ -1,5 +1,5 @@
-import styled, { createGlobalStyle } from "styled-components";
-import { css } from "styled-components";
+import { createGlobalStyle } from "styled-components";
+import styled, { css } from "styled-components";
 import Template from "./components/Template";
 import TodoHeader from "./components/TodoHeader";
 import TodoList from "./components/TodoList";
@@ -19,10 +19,10 @@ body {
 const CircleButton = styled.button`
   background: #c3b274;
   &:hover {
-    background: #c3b274;
+    background: white;
   }
   &:active {
-    background: #c3b274;
+    background: white;
   }
 
   z-index: 5;
@@ -46,6 +46,7 @@ const CircleButton = styled.button`
   ${(props) =>
     props.open &&
     css`
+      background: white;
       transform: translate(-50%, 50%) rotate(45deg);
     `}
 `;
@@ -108,10 +109,11 @@ const App = () => {
       <GlobalStyle />
       <Template>
         <TodoHeader />
-        <TodoList todos={todos} />
-        <CircleButton onClick={onToggle}>
-          <MdAdd />
-        </CircleButton>
+        <TodoList
+          todos={todos}
+          onCheckToggle={onCheckToggle}
+          onToggle={onToggle}
+        />
         {open && (
           <TodoCreate
             onToggle={onToggle}
@@ -119,6 +121,9 @@ const App = () => {
             selectedTodo={selectedTodo}
           />
         )}
+        <CircleButton onClick={onToggle} open={open}>
+          <MdAdd />
+        </CircleButton>
       </Template>
     </>
   );
