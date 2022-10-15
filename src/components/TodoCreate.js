@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import styled, { css } from "styled-components";
-import { MdAdd, MdAddCircle } from "react-icons/md";
+import styled from "styled-components";
+import { MdAdd } from "react-icons/md";
+import { use } from "chai";
 
 const Background = styled.div`
   position: absolute;
@@ -10,49 +11,16 @@ const Background = styled.div`
   overflow: hidden;
   width: 375px;
   height: 812px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: #00000050;
 `;
 
-const CircleButton = styled.button`
-  background: #c3b274;
-  &:hover {
-    background: #c3b274;
-  }
-  &:active {
-    background: #c3b274;
-  }
-
-  z-index: 5;
-  cursor: pointer;
-  width: 60px;
-  height: 60px;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  font-size: 60px;
-  right: -10px;
-  bottom: 50px;
-  transform: translate(-50%, 50%);
-  color: #414141;
-  border-radius: 50%;
-  border: none;
-  outline: none;
-  display: flex;
-
-  transition: 0.125s all ease-in;
-  ${(props) =>
-    props.open &&
-    css`
-      transform: translate(-50%, 50%) rotate(45deg);
-    `}
-`;
-
 const InsertFormPositioner = styled.div`
-  width: 80%;
+  width: 100%;
+  height: 100%;
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const InsertForm = styled.form`
@@ -62,12 +30,8 @@ const InsertForm = styled.form`
   display: flex;
   align-items: center;
   flex-direction: column;
-
-  .add-btn {
-    margin-top: 30px;
-    font-size: 40px;
-    color: #c3b274;
-  }
+  z-index: 990;
+  position: relative;
 `;
 
 const Text = styled.div`
@@ -88,27 +52,58 @@ const Input = styled.input`
   box-sizing: border-box;
 `;
 
-const TodoCreate = () => {
-  const [open, setOpen] = useState(false);
+const AddBtn = styled.button`
+  background: #c3b274;
 
-  const onToggle = () => setOpen(!open);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  bottom: 25px;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  color: #414141;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  display: flex;
+
+  .add-btn {
+    font-size: 60px;
+  }
+`;
+
+const TodoCreate = ({ onToggle, onCreateTodo, selectedTodo }) => {
+  const [value, setValue] = useState("");
+
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    onCreateTodo(value);
+    setValue("");
+    onToggle();
+  };
 
   return (
     <>
-      <Background>
-        {open && (
-          <InsertFormPositioner>
-            <InsertForm>
-              <Text>Add new thing!</Text>
-              <Input autoFocus placeholder="Enter" />
-              <MdAddCircle className="add-btn" />
-            </InsertForm>
-          </InsertFormPositioner>
-        )}
-        <CircleButton onClick={onToggle} open={open}>
-          <MdAdd />
-        </CircleButton>
-      </Background>
+      <InsertFormPositioner>
+        <Background onClick={onToggle}></Background>
+        <InsertForm onSubmit={onSubmit}>
+          <Text>Add new thing!</Text>
+          <Input
+            autoFocus
+            placeholder="Please type and enter"
+            value={value}
+            onChange={onChange}
+          />
+          <AddBtn type="submit">
+            <MdAdd className="add-btn" />
+          </AddBtn>
+        </InsertForm>
+      </InsertFormPositioner>
     </>
   );
 };
