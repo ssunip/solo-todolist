@@ -1,7 +1,8 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { MdCheckCircleOutline, MdRadioButtonUnchecked } from "react-icons/md";
 import { BiPencil, BiTrash } from "react-icons/bi";
+import { useEffect } from "react";
 
 const Remove = styled.div`
   margin: 0px 5px 0px;
@@ -61,7 +62,13 @@ const Text = styled.div`
   color: #ffffff;
 `;
 
-const TodoItem = ({ todo, onCheckToggle, onToggle, onDelete }) => {
+const TodoItem = ({
+  todo,
+  onCheckToggle,
+  onDelete,
+  onChangeSelectedtodo,
+  onUpdateToggle,
+}) => {
   const { id, text, checked } = todo;
 
   return (
@@ -91,7 +98,12 @@ const TodoItem = ({ todo, onCheckToggle, onToggle, onDelete }) => {
       </CheckedCircle>
 
       <Update>
-        <BiPencil />
+        <BiPencil
+          onClick={() => {
+            onUpdateToggle();
+            onChangeSelectedtodo(todo);
+          }}
+        />
       </Update>
       <Remove>
         <BiTrash

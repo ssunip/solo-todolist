@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { MdAdd } from "react-icons/md";
+import { BiPencil } from "react-icons/bi";
 
 const Background = styled.div`
   position: absolute;
@@ -51,7 +51,7 @@ const Input = styled.input`
   box-sizing: border-box;
 `;
 
-const AddBtn = styled.button`
+const UpdateBtn = styled.button`
   background: #c3b274;
   &:hover {
     background: white;
@@ -73,7 +73,14 @@ const AddBtn = styled.button`
   font-size: 60px;
 `;
 
-const TodoCreate = ({ onToggle, onCreateTodo }) => {
+const TodoUpdate = ({
+  id,
+  onUpdateToggle,
+  onUpdate,
+  onCheckToggle,
+  selectedTodo,
+  todos,
+}) => {
   const [value, setValue] = useState("");
 
   const onChange = (e) => {
@@ -82,30 +89,37 @@ const TodoCreate = ({ onToggle, onCreateTodo }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    onCreateTodo(value);
+    onUpdate(id, value);
     setValue("");
-    onToggle();
+    onUpdateToggle();
+    onCheckToggle(id);
   };
+
+  useEffect(() => {
+    if (selectedTodo) {
+      setValue(selectedTodo.text);
+    }
+  }, [selectedTodo]);
 
   return (
     <>
       <InsertFormPositioner>
-        <Background onClick={onToggle}></Background>
+        <Background onClick={onUpdateToggle}></Background>
         <InsertForm onSubmit={onSubmit}>
-          <Text>Add new thing!</Text>
+          <Text>Update your thing!</Text>
           <Input
             autoFocus
             placeholder="Please type and enter"
             value={value}
             onChange={onChange}
           />
-          <AddBtn type="submit">
-            <MdAdd />
-          </AddBtn>
+          <UpdateBtn type="submit">
+            <BiPencil />
+          </UpdateBtn>
         </InsertForm>
       </InsertFormPositioner>
     </>
   );
 };
 
-export default TodoCreate;
+export default TodoUpdate;

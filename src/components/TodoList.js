@@ -25,7 +25,13 @@ const Title = styled.div`
   font-weight: 700;
 `;
 
-const TodoList = ({ todos, onCheckToggle, onToggle, onDelete }) => {
+const TodoList = ({
+  todos,
+  onCheckToggle,
+  onDelete,
+  onChangeSelectedtodo,
+  onUpdateToggle,
+}) => {
   return (
     <TodoListBlock>
       <Title>INBOX</Title>
@@ -35,8 +41,9 @@ const TodoList = ({ todos, onCheckToggle, onToggle, onDelete }) => {
             key={todo.id}
             todo={todo}
             onCheckToggle={onCheckToggle}
-            onToggle={onToggle}
             onDelete={onDelete}
+            onChangeSelectedtodo={onChangeSelectedtodo}
+            onUpdateToggle={onUpdateToggle}
           />
         ))}
       </Main>

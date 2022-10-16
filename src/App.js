@@ -4,6 +4,7 @@ import Template from "./components/Template";
 import TodoHeader from "./components/TodoHeader";
 import TodoList from "./components/TodoList";
 import TodoCreate from "./components/TodoCreate";
+import TodoUpdate from "./components/TodoUpdate";
 import { useState } from "react";
 import { MdAdd } from "react-icons/md";
 
@@ -56,6 +57,7 @@ let nextId = 4;
 
 const App = () => {
   const [open, setOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
   const [completeNumber, setCompleteNumber] = useState(2);
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [todos, setTodos] = useState([
@@ -77,15 +79,19 @@ const App = () => {
   ]);
 
   const onToggle = () => {
+    setOpen(!open);
+  };
+
+  const onUpdateToggle = () => {
     if (selectedTodo) {
       setSelectedTodo(null);
     }
-    setOpen(!open);
+    setUpdateOpen(!updateOpen);
   };
 
   const onCreateTodo = (text) => {
     if (text === "") {
-      return alert("Please enter your new thing :)");
+      return alert("Please enter your thing :)");
     } else {
       const todo = {
         id: nextId,
@@ -98,16 +104,34 @@ const App = () => {
   };
 
   const onCheckToggle = (id) => {
-    setTodos((todos) =>
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, checked: !todo.checked } : todo
-      )
-    );
+    if (selectedTodo) {
+      setTodos((todos) =>
+        todos.map((todo) =>
+          todo.id === id ? { ...todo, checked: false } : todo
+        )
+      );
+    } else {
+      setTodos((todos) =>
+        todos.map((todo) =>
+          todo.id === id ? { ...todo, checked: !todo.checked } : todo
+        )
+      );
+    }
   };
 
   const onDelete = (id) => {
     setTodos((todos) => todos.filter((todo) => todo.id !== id));
     console.log(id);
+  };
+
+  const onUpdate = (id, text) => {
+    setTodos((todos) =>
+      todos.map((todo) => (todo.id === id ? { ...todo, text } : todo))
+    );
+  };
+
+  const onChangeSelectedtodo = (todo) => {
+    setSelectedTodo(todo);
   };
 
   return (
@@ -118,16 +142,21 @@ const App = () => {
         <TodoList
           todos={todos}
           onCheckToggle={onCheckToggle}
-          onToggle={onToggle}
           onDelete={onDelete}
+          onChangeSelectedtodo={onChangeSelectedtodo}
+          onUpdateToggle={onUpdateToggle}
         />
-        {open && (
-          <TodoCreate
-            onToggle={onToggle}
-            onCreateTodo={onCreateTodo}
+        {updateOpen && (
+          <TodoUpdate
+            id={selectedTodo.id}
+            todos={todos}
+            onUpdateToggle={onUpdateToggle}
+            onUpdate={onUpdate}
+            onCheckToggle={onCheckToggle}
             selectedTodo={selectedTodo}
           />
         )}
+        {open && <TodoCreate onToggle={onToggle} onCreateTodo={onCreateTodo} />}
         <CircleButton onClick={onToggle} open={open}>
           <MdAdd />
         </CircleButton>
