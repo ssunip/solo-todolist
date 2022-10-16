@@ -79,7 +79,6 @@ const TodoUpdate = ({
   onUpdate,
   onCheckToggle,
   selectedTodo,
-  todos,
 }) => {
   const [value, setValue] = useState("");
 

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const TodoHeaderBlock = styled.div`
-  padding: 55px 20px 20px 20px;
+  padding: 55px 15px 20px 20px;
   height: 225px;
   background-image: url("https://user-images.githubusercontent.com/104997140/194756331-60afbebd-1fb6-43ad-9a64-230676b24fdb.jpg");
   background-size: 375px 225px;
@@ -14,23 +14,25 @@ const TodoHeaderBlock = styled.div`
   .today {
     font-size: 15px;
   }
-  .tasks-left {
-    font-size: 15px;
-  }
   .todo_detail {
     margin-top: 40px;
     display: flex;
     justify-content: space-between;
   }
   .dimmed_layer {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
     position: absolute;
     top: 0px;
     right: 0px;
     width: 150px;
     height: 225px;
-    background-color: #414141;
-    opacity: 0.15;
+    background-color: #41414115;
+  }
+  .tasks-left {
+    margin: 30px 0;
+    font-size: 15px;
   }
 `;
 
@@ -41,7 +43,7 @@ const today = () => {
   );
 };
 
-const TodoHeader = () => {
+const TodoHeader = ({ todoLength, completeNumber }) => {
   return (
     <TodoHeaderBlock>
       <div>
@@ -51,9 +53,15 @@ const TodoHeader = () => {
       </div>
       <div className="todo_detail">
         <span className="today">{today()}</span>
-        <span className="tasks-left">completed 5 / 10</span>
+        {/* <span className="tasks-left">
+          completed {completeNumber} / {todoLength}
+        </span> */}
       </div>
-      <span className="dimmed_layer"></span>
+      <div className="dimmed_layer">
+        <span className="tasks-left">
+          completed {completeNumber} / {todoLength}
+        </span>
+      </div>
     </TodoHeaderBlock>
   );
 };

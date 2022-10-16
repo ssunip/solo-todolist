@@ -5,7 +5,7 @@ import TodoHeader from "./components/TodoHeader";
 import TodoList from "./components/TodoList";
 import TodoCreate from "./components/TodoCreate";
 import TodoUpdate from "./components/TodoUpdate";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 
 const GlobalStyle = createGlobalStyle`
@@ -134,11 +134,17 @@ const App = () => {
     setSelectedTodo(todo);
   };
 
+  useEffect(() => {
+    setCompleteNumber(() =>
+      todos.reduce((acc, cur) => (cur.checked ? (acc += 1) : acc), 0)
+    );
+  }, [todos]);
+
   return (
     <>
       <GlobalStyle />
       <Template>
-        <TodoHeader />
+        <TodoHeader todoLength={todos.length} completeNumber={completeNumber} />
         <TodoList
           todos={todos}
           onCheckToggle={onCheckToggle}
@@ -149,7 +155,6 @@ const App = () => {
         {updateOpen && (
           <TodoUpdate
             id={selectedTodo.id}
-            todos={todos}
             onUpdateToggle={onUpdateToggle}
             onUpdate={onUpdate}
             onCheckToggle={onCheckToggle}
