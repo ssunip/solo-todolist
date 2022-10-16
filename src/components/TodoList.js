@@ -5,29 +5,41 @@ import TodoItem from "./TodoItem";
 const TodoListBlock = styled.div`
   flex: 1;
   padding: 20px 10px;
-  padding-bottom: 48px;
-  overflow-y: auto;
   background-color: #414141;
 `;
 
+const Main = styled.main`
+  margin-top: 40px;
+  height: 500px;
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 const Title = styled.div`
+  position: absolute;
   margin-left: 10px;
   color: white;
   font-weight: 700;
 `;
 
-const TodoList = ({ todos, onCheckToggle, onToggle }) => {
+const TodoList = ({ todos, onCheckToggle, onToggle, onDelete }) => {
   return (
     <TodoListBlock>
       <Title>INBOX</Title>
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          onCheckToggle={onCheckToggle}
-          onToggle={onToggle}
-        />
-      ))}
+      <Main>
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onCheckToggle={onCheckToggle}
+            onToggle={onToggle}
+            onDelete={onDelete}
+          />
+        ))}
+      </Main>
     </TodoListBlock>
   );
 };

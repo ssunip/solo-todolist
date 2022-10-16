@@ -41,6 +41,7 @@ const CircleButton = styled.button`
   border: none;
   outline: none;
   display: flex;
+  box-shadow: 0px 2px 10px 5px #c3b27450;
 
   transition: 0.125s all ease-in;
   ${(props) =>
@@ -104,6 +105,11 @@ const App = () => {
     );
   };
 
+  const onDelete = (id) => {
+    setTodos((todos) => todos.filter((todo) => todo.id !== id));
+    console.log(id);
+  };
+
   return (
     <>
       <GlobalStyle />
@@ -113,6 +119,7 @@ const App = () => {
           todos={todos}
           onCheckToggle={onCheckToggle}
           onToggle={onToggle}
+          onDelete={onDelete}
         />
         {open && (
           <TodoCreate

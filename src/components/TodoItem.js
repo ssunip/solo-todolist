@@ -44,7 +44,6 @@ const CheckedCircle = styled.div`
   display: flex;
   align-items: center;
   flex: 1;
-  margin-right: 1rem;
   font-size: 25px;
   color: #c3b274;
 
@@ -56,13 +55,13 @@ const CheckedCircle = styled.div`
 `;
 
 const Text = styled.div`
-  padding: 15px;
+  padding-left: 15px;
   flex: 1;
   font-size: 15px;
   color: #ffffff;
 `;
 
-const TodoItem = ({ todo, onCheckToggle, onToggle }) => {
+const TodoItem = ({ todo, onCheckToggle, onToggle, onDelete }) => {
   const { id, text, checked } = todo;
 
   return (
@@ -95,7 +94,11 @@ const TodoItem = ({ todo, onCheckToggle, onToggle }) => {
         <BiPencil />
       </Update>
       <Remove>
-        <BiTrash />
+        <BiTrash
+          onClick={() => {
+            onDelete(id);
+          }}
+        />
       </Remove>
     </TodoItemBlock>
   );
