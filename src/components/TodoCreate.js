@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MdAdd } from "react-icons/md";
-import { useTodoDispatch, useTodoNextId } from "../TodoContext";
+import { useTodoDispatch } from "../TodoContext";
 
 const Background = styled.div`
   position: absolute;
@@ -78,7 +78,6 @@ const TodoCreate = ({ onToggle }) => {
   const [value, setValue] = useState("");
 
   const dispatch = useTodoDispatch();
-  const nextId = useTodoNextId();
 
   const onChange = (e) => {
     setValue(e.target.value);
@@ -89,14 +88,12 @@ const TodoCreate = ({ onToggle }) => {
     dispatch({
       type: "CREATE",
       todo: {
-        id: nextId.current,
         text: value,
         checked: false,
       },
     });
     setValue("");
     onToggle();
-    nextId.current += 1;
   };
 
   return (

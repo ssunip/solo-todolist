@@ -1,25 +1,9 @@
-import React, { useReducer, createContext, useContext, useRef } from "react";
-
-const initialTodos = [
-  {
-    id: 1,
-    text: "할일 1",
-    checked: true,
-  },
-  {
-    id: 2,
-    text: "할일 2",
-    checked: true,
-  },
-  {
-    id: 3,
-    text: "할일 3",
-    checked: false,
-  },
-];
+import React, { useReducer, createContext, useContext, useEffect } from "react";
 
 function todoReducer(state, action) {
   switch (action.type) {
+    case "SELECT":
+      return action.todo;
     case "CREATE":
       return state.concat(action.todo);
     case "CHECKED":
@@ -41,17 +25,25 @@ function todoReducer(state, action) {
 
 const TodoStateContext = createContext();
 const TodoDispatchContext = createContext();
-const TodoNextIdContext = createContext();
 
 export function TodoProvider({ children }) {
-  const [state, dispatch] = useReducer(todoReducer, initialTodos);
-  const nextId = useRef(4);
+  const [state, dispatch] = useReducer(todoReducer, []);
+
+  useEffect(() => {
+    fetch("http://localhost:3001/todos")
+      .then((res) => res.json())
+      .then((data) =>
+        dispatch({
+          type: "SELECT",
+          todo: data,
+        })
+      );
+  }, []);
+
   return (
     <TodoStateContext.Provider value={state}>
       <TodoDispatchContext.Provider value={dispatch}>
-        <TodoNextIdContext.Provider value={nextId}>
-          {children}
-        </TodoNextIdContext.Provider>
+        {children}
       </TodoDispatchContext.Provider>
     </TodoStateContext.Provider>
   );
@@ -67,14 +59,6 @@ export function useTodoState() {
 
 export function useTodoDispatch() {
   const context = useContext(TodoDispatchContext);
-  if (!context) {
-    throw new Error("Cannot find TodoProvider");
-  }
-  return context;
-}
-
-export function useTodoNextId() {
-  const context = useContext(TodoNextIdContext);
   if (!context) {
     throw new Error("Cannot find TodoProvider");
   }
