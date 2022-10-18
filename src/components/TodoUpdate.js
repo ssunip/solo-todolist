@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { BiPencil } from "react-icons/bi";
+import { useTodoDispatch } from "../TodoContext";
 
 const Background = styled.div`
   position: absolute;
@@ -73,14 +74,10 @@ const UpdateBtn = styled.button`
   font-size: 60px;
 `;
 
-const TodoUpdate = ({
-  id,
-  onUpdateToggle,
-  onUpdate,
-  onCheckToggle,
-  selectedTodo,
-}) => {
+const TodoUpdate = ({ id, onUpdateToggle, selectedTodo }) => {
   const [value, setValue] = useState("");
+
+  const dispatch = useTodoDispatch();
 
   const onChange = (e) => {
     setValue(e.target.value);
@@ -88,10 +85,18 @@ const TodoUpdate = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    onUpdate(id, value);
+    dispatch({
+      type: "UPDATE",
+      todo: {
+        id,
+        text: value,
+        checked: false,
+      },
+    });
+
+    // 초기화 코드
     setValue("");
     onUpdateToggle();
-    onCheckToggle(id);
   };
 
   useEffect(() => {
@@ -111,6 +116,7 @@ const TodoUpdate = ({
             placeholder="Please type and enter"
             value={value}
             onChange={onChange}
+            required
           />
           <UpdateBtn type="submit">
             <BiPencil />

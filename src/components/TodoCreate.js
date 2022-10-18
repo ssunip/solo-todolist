@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MdAdd } from "react-icons/md";
+import { useTodoDispatch, useTodoNextId } from "../TodoContext";
 
 const Background = styled.div`
   position: absolute;
@@ -73,8 +74,11 @@ const AddBtn = styled.button`
   font-size: 60px;
 `;
 
-const TodoCreate = ({ onToggle, onCreateTodo }) => {
+const TodoCreate = ({ onToggle }) => {
   const [value, setValue] = useState("");
+
+  const dispatch = useTodoDispatch();
+  const nextId = useTodoNextId();
 
   const onChange = (e) => {
     setValue(e.target.value);
@@ -82,9 +86,17 @@ const TodoCreate = ({ onToggle, onCreateTodo }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    onCreateTodo(value);
+    dispatch({
+      type: "CREATE",
+      todo: {
+        id: nextId.current,
+        text: value,
+        checked: false,
+      },
+    });
     setValue("");
     onToggle();
+    nextId.current += 1;
   };
 
   return (
@@ -98,6 +110,7 @@ const TodoCreate = ({ onToggle, onCreateTodo }) => {
             placeholder="Please type and enter"
             value={value}
             onChange={onChange}
+            required
           />
           <AddBtn type="submit">
             <MdAdd />
@@ -108,4 +121,4 @@ const TodoCreate = ({ onToggle, onCreateTodo }) => {
   );
 };
 
-export default TodoCreate;
+export default React.memo(TodoCreate);

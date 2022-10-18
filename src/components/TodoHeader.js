@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useTodoState } from "../TodoContext";
 
 const TodoHeaderBlock = styled.div`
   padding: 55px 15px 20px 20px;
@@ -43,7 +44,10 @@ const today = () => {
   );
 };
 
-const TodoHeader = ({ todoLength, completeNumber }) => {
+const TodoHeader = () => {
+  const todos = useTodoState();
+  const checkedTodos = todos.filter((todo) => todo.checked);
+
   return (
     <TodoHeaderBlock>
       <div>
@@ -53,13 +57,10 @@ const TodoHeader = ({ todoLength, completeNumber }) => {
       </div>
       <div className="todo_detail">
         <span className="today">{today()}</span>
-        {/* <span className="tasks-left">
-          completed {completeNumber} / {todoLength}
-        </span> */}
       </div>
       <div className="dimmed_layer">
         <span className="tasks-left">
-          completed {completeNumber} / {todoLength}
+          completed {checkedTodos.length} / {todos.length}
         </span>
       </div>
     </TodoHeaderBlock>

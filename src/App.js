@@ -5,8 +5,9 @@ import TodoHeader from "./components/TodoHeader";
 import TodoList from "./components/TodoList";
 import TodoCreate from "./components/TodoCreate";
 import TodoUpdate from "./components/TodoUpdate";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { MdAdd } from "react-icons/md";
+import { TodoProvider } from "./TodoContext";
 
 const GlobalStyle = createGlobalStyle`
 * {
@@ -53,30 +54,10 @@ const CircleButton = styled.button`
     `}
 `;
 
-let nextId = 4;
-
 const App = () => {
   const [open, setOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
-  const [completeNumber, setCompleteNumber] = useState(2);
   const [selectedTodo, setSelectedTodo] = useState(null);
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      text: "할일 1",
-      checked: true,
-    },
-    {
-      id: 2,
-      text: "할일 2",
-      checked: true,
-    },
-    {
-      id: 3,
-      text: "할일 3",
-      checked: false,
-    },
-  ]);
 
   const onToggle = () => {
     setOpen(!open);
@@ -89,66 +70,16 @@ const App = () => {
     setUpdateOpen(!updateOpen);
   };
 
-  const onCreateTodo = (text) => {
-    if (text === "") {
-      return alert("Please enter your thing :)");
-    } else {
-      const todo = {
-        id: nextId,
-        text,
-        checked: false,
-      };
-      setTodos((todos) => [...todos, todo]);
-      nextId++;
-    }
-  };
-
-  const onCheckToggle = (id) => {
-    if (selectedTodo) {
-      setTodos((todos) =>
-        todos.map((todo) =>
-          todo.id === id ? { ...todo, checked: false } : todo
-        )
-      );
-    } else {
-      setTodos((todos) =>
-        todos.map((todo) =>
-          todo.id === id ? { ...todo, checked: !todo.checked } : todo
-        )
-      );
-    }
-  };
-
-  const onDelete = (id) => {
-    setTodos((todos) => todos.filter((todo) => todo.id !== id));
-    console.log(id);
-  };
-
-  const onUpdate = (id, text) => {
-    setTodos((todos) =>
-      todos.map((todo) => (todo.id === id ? { ...todo, text } : todo))
-    );
-  };
-
   const onChangeSelectedtodo = (todo) => {
     setSelectedTodo(todo);
   };
 
-  useEffect(() => {
-    setCompleteNumber(() =>
-      todos.reduce((acc, cur) => (cur.checked ? (acc += 1) : acc), 0)
-    );
-  }, [todos]);
-
   return (
-    <>
+    <TodoProvider>
       <GlobalStyle />
       <Template>
-        <TodoHeader todoLength={todos.length} completeNumber={completeNumber} />
+        <TodoHeader />
         <TodoList
-          todos={todos}
-          onCheckToggle={onCheckToggle}
-          onDelete={onDelete}
           onChangeSelectedtodo={onChangeSelectedtodo}
           onUpdateToggle={onUpdateToggle}
         />
@@ -156,17 +87,15 @@ const App = () => {
           <TodoUpdate
             id={selectedTodo.id}
             onUpdateToggle={onUpdateToggle}
-            onUpdate={onUpdate}
-            onCheckToggle={onCheckToggle}
             selectedTodo={selectedTodo}
           />
         )}
-        {open && <TodoCreate onToggle={onToggle} onCreateTodo={onCreateTodo} />}
+        {open && <TodoCreate onToggle={onToggle} />}
         <CircleButton onClick={onToggle} open={open}>
           <MdAdd />
         </CircleButton>
       </Template>
-    </>
+    </TodoProvider>
   );
 };
 
