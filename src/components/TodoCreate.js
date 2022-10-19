@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MdAdd } from "react-icons/md";
-import { useTodoDispatch } from "../TodoContext";
 
 const Background = styled.div`
   position: absolute;
@@ -74,10 +73,8 @@ const AddBtn = styled.button`
   font-size: 60px;
 `;
 
-const TodoCreate = ({ onToggle }) => {
+const TodoCreate = ({ onToggle, addTodo }) => {
   const [value, setValue] = useState("");
-
-  const dispatch = useTodoDispatch();
 
   const onChange = (e) => {
     setValue(e.target.value);
@@ -85,13 +82,7 @@ const TodoCreate = ({ onToggle }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch({
-      type: "CREATE",
-      todo: {
-        text: value,
-        checked: false,
-      },
-    });
+    addTodo(value);
     setValue("");
     onToggle();
   };

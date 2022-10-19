@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { BiPencil } from "react-icons/bi";
-import { useTodoDispatch } from "../TodoContext";
 
 const Background = styled.div`
   position: absolute;
@@ -74,10 +73,8 @@ const UpdateBtn = styled.button`
   font-size: 60px;
 `;
 
-const TodoUpdate = ({ id, onUpdateToggle, selectedTodo }) => {
+const TodoUpdate = ({ id, onUpdateToggle, selectedTodo, updateTodo }) => {
   const [value, setValue] = useState("");
-
-  const dispatch = useTodoDispatch();
 
   const onChange = (e) => {
     setValue(e.target.value);
@@ -85,14 +82,7 @@ const TodoUpdate = ({ id, onUpdateToggle, selectedTodo }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch({
-      type: "UPDATE",
-      todo: {
-        id,
-        text: value,
-        checked: false,
-      },
-    });
+    updateTodo(id, value);
 
     // 초기화 코드
     setValue("");

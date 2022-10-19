@@ -1,24 +1,19 @@
 {
   "todos": [
     {
-      "text": "할일 1",
-      "checked": false,
+      "text": "해가 져불어잉",
+      "checked": true,
       "id": 1
     },
     {
       "text": "할일 2",
-      "checked": false,
+      "checked": true,
       "id": 2
     },
     {
       "text": "할일 3",
       "checked": false,
       "id": 3
-    },
-    {
-      "text": "할일 4",
-      "checked": false,
-      "id": 4
     }
   ]
 }

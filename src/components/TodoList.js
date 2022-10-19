@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import TodoItem from "./TodoItem";
-import { useTodoState } from "../TodoContext";
 
 const TodoListBlock = styled.div`
   flex: 1;
@@ -26,9 +25,13 @@ const Title = styled.div`
   font-weight: 700;
 `;
 
-const TodoList = ({ onChangeSelectedtodo, onUpdateToggle }) => {
-  const todos = useTodoState();
-
+const TodoList = ({
+  todos,
+  onChangeSelectedtodo,
+  onUpdateToggle,
+  deleteTodo,
+  checkedTodo,
+}) => {
   return (
     <TodoListBlock>
       <Title>INBOX</Title>
@@ -36,12 +39,11 @@ const TodoList = ({ onChangeSelectedtodo, onUpdateToggle }) => {
         {todos.map((todo) => (
           <TodoItem
             key={todo.id}
-            id={todo.id}
-            text={todo.text}
-            checked={todo.checked}
             todo={todo}
             onChangeSelectedtodo={onChangeSelectedtodo}
             onUpdateToggle={onUpdateToggle}
+            deleteTodo={deleteTodo}
+            checkedTodo={checkedTodo}
           />
         ))}
       </Main>

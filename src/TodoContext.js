@@ -1,4 +1,71 @@
-import React, { useReducer, createContext, useContext, useEffect } from "react";
+// context api는 나중에 다시 보기
+
+import React, { useReducer, createContext, useContext } from "react";
+
+const initialTodos = [
+  {
+    id: 1,
+    text: "프로젝트 생성하기",
+    done: true,
+  },
+  {
+    id: 2,
+    text: "컴포넌트 스타일링하기",
+    done: true,
+  },
+  {
+    id: 3,
+    text: "Context 만들기",
+    done: false,
+  },
+  {
+    id: 4,
+    text: "기능 구현하기",
+    done: false,
+  },
+];
+
+// function todoReducer(state, action) {
+//   switch (action.type) {
+//     case "SELECT":
+//       return action.todo;
+//     case "CREATE": //post
+//       fetch("http://localhost:3001/todos?id=${id}", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           text: action.todo.text,
+//           checked: false,
+//         }),
+//       }).then((res) => res.json());
+//       return state.concat(action.todo);
+//     case "CHECKED": //patch
+//       fetch(`http://localhost:3001/todos/${action.id}`, {
+//         method: "PATCH",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ checked: action.checked }),
+//       })
+//         .then((res) => res.json())
+//         .then((res) => console.log(!res.checked));
+//       return state.map((todo) =>
+//         todo.id === action.id ? { ...todo, checked: !todo.checked } : todo
+//       );
+//     case "REMOVE": //delete
+//       return state.filter((todo) => todo.id !== action.id);
+//     case "UPDATE": //patch
+//       return state.map((todo) =>
+//         todo.id === action.todo.id
+//           ? { ...todo, text: action.todo.text, checked: action.todo.checked }
+//           : todo
+//       );
+//     default:
+//       throw new Error(`Unhandled action type: ${action.type}`);
+//   }
+// }
 
 function todoReducer(state, action) {
   switch (action.type) {
@@ -25,25 +92,18 @@ function todoReducer(state, action) {
 
 const TodoStateContext = createContext();
 const TodoDispatchContext = createContext();
+// const TodoNextIdContext = createContext();
 
 export function TodoProvider({ children }) {
-  const [state, dispatch] = useReducer(todoReducer, []);
-
-  useEffect(() => {
-    fetch("http://localhost:3001/todos")
-      .then((res) => res.json())
-      .then((data) =>
-        dispatch({
-          type: "SELECT",
-          todo: data,
-        })
-      );
-  }, []);
+  const [state, dispatch] = useReducer(todoReducer, initialTodos);
+  // const nextId = useRef(1);
 
   return (
     <TodoStateContext.Provider value={state}>
       <TodoDispatchContext.Provider value={dispatch}>
+        {/* <TodoNextIdContext.Provider value={nextId}> */}
         {children}
+        {/* </TodoNextIdContext.Provider> */}
       </TodoDispatchContext.Provider>
     </TodoStateContext.Provider>
   );
@@ -64,3 +124,11 @@ export function useTodoDispatch() {
   }
   return context;
 }
+
+// export function useTodoNextId() {
+//   const context = useContext(TodoNextIdContext);
+//   if (!context) {
+//     throw new Error("Cannot find TodoProvider");
+//   }
+//   return context;
+// }

@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { MdCheckCircleOutline, MdRadioButtonUnchecked } from "react-icons/md";
 import { BiPencil, BiTrash } from "react-icons/bi";
-import { useTodoDispatch } from "../TodoContext";
 
 const Remove = styled.div`
   margin: 0px 5px 0px;
@@ -63,22 +62,38 @@ const Text = styled.div`
 `;
 
 const TodoItem = ({
-  id,
-  text,
-  checked,
   todo,
   onChangeSelectedtodo,
   onUpdateToggle,
+  deleteTodo,
+  checkedTodo,
 }) => {
-  const dispatch = useTodoDispatch();
-  const onCheckToggle = () => dispatch({ type: "CHECKED", id });
-  const onDelete = () => dispatch({ type: "REMOVE", id });
+  const { id, text, checked } = todo;
 
   return (
     <TodoItemBlock>
-      <CheckedCircle checked={checked} onClick={onCheckToggle}>
-        {checked ? <MdCheckCircleOutline /> : <MdRadioButtonUnchecked />}
-        <Text className={`${checked ? "checked" : ""}`}>{text}</Text>
+      <CheckedCircle className={`${checked ? "checked" : ""}`}>
+        {checked ? (
+          <MdCheckCircleOutline
+            onClick={() => {
+              checkedTodo(id);
+            }}
+          />
+        ) : (
+          <MdRadioButtonUnchecked
+            onClick={() => {
+              checkedTodo(id);
+            }}
+          />
+        )}
+        <Text
+          className={`${checked ? "checked" : ""}`}
+          onClick={() => {
+            checkedTodo(id);
+          }}
+        >
+          {text}
+        </Text>
       </CheckedCircle>
 
       <Update>
@@ -90,7 +105,7 @@ const TodoItem = ({
         />
       </Update>
       <Remove>
-        <BiTrash onClick={onDelete} />
+        <BiTrash onClick={() => deleteTodo(id)} />
       </Remove>
     </TodoItemBlock>
   );

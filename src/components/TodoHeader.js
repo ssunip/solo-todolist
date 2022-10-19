@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { useTodoState } from "../TodoContext";
 
 const TodoHeaderBlock = styled.div`
   padding: 55px 15px 20px 20px;
@@ -44,8 +43,7 @@ const today = () => {
   );
 };
 
-const TodoHeader = () => {
-  const todos = useTodoState();
+const TodoHeader = ({ todos }) => {
   const checkedTodos = todos.filter((todo) => todo.checked);
 
   return (

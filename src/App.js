@@ -5,7 +5,7 @@ import TodoHeader from "./components/TodoHeader";
 import TodoList from "./components/TodoList";
 import TodoCreate from "./components/TodoCreate";
 import TodoUpdate from "./components/TodoUpdate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
 import { TodoProvider } from "./TodoContext";
 
@@ -58,6 +58,61 @@ const App = () => {
   const [open, setOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState(null);
+  const [todos, setTodos] = useState([]);
+
+  const setAllTodos = () => {
+    fetch("http://localhost:3001/todos/")
+      .then((res) => res.json())
+      .then((data) => setTodos(data));
+  };
+
+  useEffect(() => {
+    setAllTodos();
+  }, [todos]);
+
+  const addTodo = (text) => {
+    const newTodo = { text, checked: false };
+    fetch("http://localhost:3001/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTodo),
+    })
+      .then((res) => res.json())
+      .then((data) => setTodos((todos) => [...todos, data]));
+  };
+
+  const checkedTodo = (id) => {
+    const target = todos.find((todo) => todo.id === id);
+    fetch(`http://localhost:3001/todos/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        checked: !target.checked,
+      }),
+    });
+  };
+
+  const deleteTodo = (id) => {
+    fetch(`http://localhost:3001/todos/${id}`, {
+      method: "DELETE",
+    });
+  };
+
+  const updateTodo = (id, text) => {
+    fetch(`http://localhost:3001/todos/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text,
+      }),
+    });
+  };
 
   const onToggle = () => {
     setOpen(!open);
@@ -78,19 +133,23 @@ const App = () => {
     <TodoProvider>
       <GlobalStyle />
       <Template>
-        <TodoHeader />
+        <TodoHeader todos={todos} />
         <TodoList
+          todos={todos}
           onChangeSelectedtodo={onChangeSelectedtodo}
           onUpdateToggle={onUpdateToggle}
+          deleteTodo={deleteTodo}
+          checkedTodo={checkedTodo}
         />
         {updateOpen && (
           <TodoUpdate
             id={selectedTodo.id}
             onUpdateToggle={onUpdateToggle}
             selectedTodo={selectedTodo}
+            updateTodo={updateTodo}
           />
         )}
-        {open && <TodoCreate onToggle={onToggle} />}
+        {open && <TodoCreate onToggle={onToggle} addTodo={addTodo} />}
         <CircleButton onClick={onToggle} open={open}>
           <MdAdd />
         </CircleButton>
