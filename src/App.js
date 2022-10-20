@@ -7,7 +7,6 @@ import TodoCreate from "./components/TodoCreate";
 import TodoUpdate from "./components/TodoUpdate";
 import { useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
-import { TodoProvider } from "./TodoContext";
 
 const GlobalStyle = createGlobalStyle`
 * {
@@ -68,7 +67,7 @@ const App = () => {
 
   useEffect(() => {
     setAllTodos();
-  }, [todos]);
+  }, []);
 
   const addTodo = (text) => {
     const newTodo = { text, checked: false };
@@ -93,13 +92,28 @@ const App = () => {
       body: JSON.stringify({
         checked: !target.checked,
       }),
-    });
+    })
+      .then((res) => res.json())
+      .then(
+        (res) =>
+          res &&
+          setTodos((todos) =>
+            todos.map((todo) =>
+              todo.id === res.id ? { ...todo, checked: !todo.checked } : todo
+            )
+          )
+      );
   };
 
   const deleteTodo = (id) => {
     fetch(`http://localhost:3001/todos/${id}`, {
       method: "DELETE",
-    });
+    })
+      .then((res) => res.json())
+      .then(
+        (res) =>
+          res && setTodos((todos) => todos.filter((todo) => todo.id !== id))
+      );
   };
 
   const updateTodo = (id, text) => {
@@ -111,7 +125,15 @@ const App = () => {
       body: JSON.stringify({
         text,
       }),
-    });
+    })
+      .then((res) => res.json())
+      .then(
+        (res) =>
+          res &&
+          setTodos((todos) =>
+            todos.map((todo) => (todo.id === res.id ? { ...todo, text } : todo))
+          )
+      );
   };
 
   const onToggle = () => {
@@ -130,7 +152,7 @@ const App = () => {
   };
 
   return (
-    <TodoProvider>
+    <>
       <GlobalStyle />
       <Template>
         <TodoHeader todos={todos} />
@@ -154,7 +176,7 @@ const App = () => {
           <MdAdd />
         </CircleButton>
       </Template>
-    </TodoProvider>
+    </>
   );
 };
 
